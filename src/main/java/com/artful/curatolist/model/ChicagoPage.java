@@ -1,4 +1,4 @@
-package model;
+package com.artful.curatolist.model;
 
 import java.util.List;
 
