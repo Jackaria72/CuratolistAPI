@@ -13,7 +13,6 @@ public class ChicagoClient {
     private final WebClient webClient;
     private final String BASE_URL = "https://api.artic.edu/api/v1";
 
-    @Autowired
     public ChicagoClient(@Qualifier("chicagoWebClientBuilder")WebClient.Builder webclientBuilder) {
         this.webClient = webclientBuilder.build();
     }

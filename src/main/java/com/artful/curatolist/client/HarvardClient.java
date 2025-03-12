@@ -14,7 +14,6 @@ public class HarvardClient {
     private final String BASE_URL = "";
     private final String API_KEY;
 
-    @Autowired
     public HarvardClient(@Qualifier("harvardWebClientBuilder") WebClient.Builder webClientBuilder,
                          @Value("${apikey.harvard}") String apiKey) {
         this.webClient = webClientBuilder.build();
