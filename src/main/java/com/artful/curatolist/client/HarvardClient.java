@@ -14,7 +14,7 @@ public class HarvardClient {
 
     public HarvardClient(WebClient.Builder webClientBuilder,
                          @Value("${apikey.harvard}") String apiKey) {
-        this.webClient = webClientBuilder.baseUrl(BASE_URL).build();
+        this.webClient = webClientBuilder.build();
         this.API_KEY = apiKey;
     }
 
