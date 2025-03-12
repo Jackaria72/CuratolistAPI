@@ -18,7 +18,7 @@ public class HarvardClient {
         this.API_KEY = apiKey;
     }
 
-    public Mono<HarvardPage> getPublicDomainArtwork(int page, int limit) {
+    public Mono<HarvardPage> getHarvardArtwork(int page, int limit) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
                         .path("/object")
