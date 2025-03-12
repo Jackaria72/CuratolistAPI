@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - name: Checkout code
+        env:
+          api.key: ${{ secrets.HARVARD_API_KEY }}
         uses: actions/checkout@v2
       
       - name: Set up JDK 21
@@ -19,9 +21,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-
-      - name: Set environment variable for API key
-        run: echo "api.key=${{ secrets.HARVARD_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run Unit Tests
         run: mvn test
