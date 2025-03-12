@@ -1,6 +1,8 @@
 package com.artful.curatolist.client;
 
 import com.artful.curatolist.model.HarvardPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,7 +14,8 @@ public class HarvardClient {
     private final String BASE_URL = "";
     private final String API_KEY;
 
-    public HarvardClient(WebClient.Builder webClientBuilder,
+    @Autowired
+    public HarvardClient(@Qualifier("harvardWebClientBuilder") WebClient.Builder webClientBuilder,
                          @Value("${apikey.harvard}") String apiKey) {
         this.webClient = webClientBuilder.build();
         this.API_KEY = apiKey;

@@ -2,6 +2,7 @@ package com.artful.curatolist.client;
 
 import com.artful.curatolist.model.ChicagoPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -13,7 +14,7 @@ public class ChicagoClient {
     private final String BASE_URL = "https://api.artic.edu/api/v1";
 
     @Autowired
-    public ChicagoClient(WebClient.Builder webclientBuilder) {
+    public ChicagoClient(@Qualifier("chicagoWebClientBuilder")WebClient.Builder webclientBuilder) {
         this.webClient = webclientBuilder.build();
     }
 
