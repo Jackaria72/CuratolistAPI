@@ -27,7 +27,7 @@ class ChicagoClientTest {
         mockResponse = "{" +
                 "\"pagination\": {" +
                 "\"total\": 60076," +
-                "\"total_pages\": 60076," +
+                "\"total_pages\": 60076" +
                 "}," +
                 "\"data\": [" +
                 "{" +
