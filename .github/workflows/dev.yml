@@ -26,7 +26,7 @@ jobs:
         run: echo "api.key=${API_KEY}" >> $GITHUB_ENV
 
       - name: Run Unit Tests
-        run: mvn test
+        run: mvn test -Dapi.key=${{ secrets.HARVARD_API_KEY }}
 
       - name: Check Test Coverage
         run: mvn verify
