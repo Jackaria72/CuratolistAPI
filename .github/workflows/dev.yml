@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.HARVARD_API_KEY }}
 
     steps:
       - name: Checkout code
@@ -20,11 +22,8 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Set environment variable for API key
-        run: echo "apikey.harvard=${{ secrets.HARVARD_API_KEY }}" >> $GITHUB_ENV
-
       - name: Run Unit Tests
-        run: mvn test
+        run: mvn test -Dapi.key=${{ secrets.HARVARD_API_KEY }}
 
       - name: Check Test Coverage
         run: mvn verify
