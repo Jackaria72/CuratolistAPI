@@ -13,4 +13,9 @@ public class WebClientConfig {
     public WebClient.Builder chicagoWebClientBuilder() {
         return WebClient.builder().baseUrl("https://api.artic.edu/api/v1");
     }
+
+    @Bean
+    public WebClient.Builder harvardWebClientBuilder() {
+        return WebClient.builder().baseUrl("https://api.harvardartmuseums.org");
+    }
 }
