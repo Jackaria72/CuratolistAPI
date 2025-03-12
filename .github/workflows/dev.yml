@@ -20,6 +20,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Create .env file with API key
+        run: echo "apikey.harvard=${{ secrets.HARVARD_API_KEY }}" > .env
+
       - name: Run Unit Tests
         run: mvn test
 
