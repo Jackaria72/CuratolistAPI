@@ -21,7 +21,7 @@ jobs:
           java-version: '21'
 
       - name: Set environment variable for API key
-        run: echo "apikey.harvard=${{ secrets.HARVARD_API_KEY }}" >> $GITHUB_ENV
+        run: echo "api.key=${{ secrets.HARVARD_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run Unit Tests
         run: mvn test
