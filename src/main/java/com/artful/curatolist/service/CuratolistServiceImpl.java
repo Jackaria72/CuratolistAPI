@@ -18,13 +18,17 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
 public class CuratolistServiceImpl implements CuratolistService{
 
-    private final ChicagoClient chicagoClient;
-    private final ChicagoMapper chicagoMapper;
-    private final HarvardClient harvardClient;
-    private final HarvardMapper harvardMapper;
+    @Autowired
+    ChicagoClient chicagoClient;
+    @Autowired
+    ChicagoMapper chicagoMapper;
+    @Autowired
+    HarvardClient harvardClient;
+    @Autowired
+    HarvardMapper harvardMapper;
+
 
     @Override
     public CLPage getArt(int page, int limit) {
