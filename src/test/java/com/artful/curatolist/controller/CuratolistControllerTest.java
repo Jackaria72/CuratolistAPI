@@ -1,0 +1,67 @@
+package com.artful.curatolist.controller;
+
+import com.artful.curatolist.model.CLArtwork;
+import com.artful.curatolist.model.CLPage;
+import com.artful.curatolist.service.CuratolistService;
+import com.artful.curatolist.service.CuratolistServiceImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest
+class CuratolistControllerTest {
+    @MockBean
+    private CuratolistServiceImpl curatolistService;
+    @InjectMocks
+    private CuratolistController curatolistController;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void testGetArtwork() throws Exception {
+        when(curatolistService.getArt(1,4)).thenReturn(getMockPage());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/curatolist/api/v1")
+                        .param("page", "1")
+                        .param("limit", "4"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pageInfo").isNotEmpty())
+                .andExpect(jsonPath("$.artwork").isNotEmpty())
+                .andExpect(jsonPath("$.artwork[0].title").value((getMockPage().artwork().getFirst().title())))
+                .andExpect(jsonPath("$.artwork[1].title").value((getMockPage().artwork().get(1).title())))
+                .andExpect(jsonPath("$.artwork[2].title").value((getMockPage().artwork().get(2).title())))
+                .andExpect(jsonPath("$.artwork[3].title").value((getMockPage().artwork().getLast().title())));
+
+    }
+
+    private static CLPage getMockPage() {
+        CLPage.PageInfo pageInfo = new CLPage.PageInfo(2,1,2,1);
+        List<CLArtwork> artworks = List.of(
+        new CLArtwork("AIC1", "Test Art 1", "Test Artist 1" , "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago"),
+        new CLArtwork("AIC2", "Test Art 2", "Test Artist 2" , "1900 - 1900", "1900", "Test ID 2", "Art Institute of Chicago"),
+        new CLArtwork("HVD1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test URL 1", "Harvard"),
+        new CLArtwork("HVD2", "Test Art 2", "Test Artist 2" , "1900", "1900", "Test URL 2", "Harvard")
+        );
+        return new CLPage(pageInfo, artworks);
+    }
+}
