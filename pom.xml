@@ -60,6 +60,16 @@
 			<version>4.12.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version> <!-- Ensure the version matches your Spring Boot version -->
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
