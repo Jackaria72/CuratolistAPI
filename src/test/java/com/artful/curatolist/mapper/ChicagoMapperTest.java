@@ -15,10 +15,10 @@ class ChicagoMapperTest {
 
     @Test
     void mapChicagoArt() {
-        ChicagoPage.PageInfo pageinfo = new ChicagoPage.PageInfo(2,1);
+        ChicagoPage.ChicagoPageInfo pageInfo = new ChicagoPage.ChicagoPageInfo(2,1);
         ChicagoPage.ChicagoArt art1 = new ChicagoPage.ChicagoArt(1,"Test Art 1","Test Artist 1", 1800,1800,"1800", "Test ID 1");
         ChicagoPage.ChicagoArt art2 = new ChicagoPage.ChicagoArt(2,"Test Art 2","Test Artist 2", 1900,1900,"1900", "Test ID 2");
-        ChicagoPage mockChicagoPage = new ChicagoPage(pageinfo, List.of(art1, art2));
+        ChicagoPage mockChicagoPage = new ChicagoPage(pageInfo, List.of(art1, art2));
 
         List<CLArtwork> result = chicagoMapper.mapChicagoArt(mockChicagoPage);
 

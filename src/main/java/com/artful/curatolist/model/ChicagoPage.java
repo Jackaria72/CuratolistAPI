@@ -2,8 +2,8 @@ package com.artful.curatolist.model;
 
 import java.util.List;
 
-public record ChicagoPage(PageInfo pagination, List<ChicagoArt> data) {
-    public record PageInfo(
+public record ChicagoPage(ChicagoPageInfo pagination, List<ChicagoArt> data) {
+    public record ChicagoPageInfo(
             int total,
             int total_pages
     ){}
