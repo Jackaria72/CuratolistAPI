@@ -20,14 +20,17 @@ import java.util.stream.Stream;
 @Service
 public class CuratolistServiceImpl implements CuratolistService{
 
-    @Autowired
-    ChicagoClient chicagoClient;
-    @Autowired
-    ChicagoMapper chicagoMapper;
-    @Autowired
-    HarvardClient harvardClient;
-    @Autowired
-    HarvardMapper harvardMapper;
+    private final ChicagoClient chicagoClient;
+    private final ChicagoMapper chicagoMapper;
+    private final HarvardClient harvardClient;
+    private final HarvardMapper harvardMapper;
+
+    public CuratolistServiceImpl(ChicagoClient chicagoClient, ChicagoMapper chicagoMapper, HarvardClient harvardClient, HarvardMapper harvardMapper) {
+        this.chicagoClient = chicagoClient;
+        this.chicagoMapper = chicagoMapper;
+        this.harvardClient = harvardClient;
+        this.harvardMapper = harvardMapper;
+    }
 
 
     @Override
