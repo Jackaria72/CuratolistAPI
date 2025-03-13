@@ -19,7 +19,7 @@ public class ChicagoMapper {
                         String.valueOf(art.date_start())+" - "+String.valueOf(art.date_end()),
                         art.date_display(),
                         art.image_id(),
-                        "Art Institue of Chicago"
+                        "Art Institute of Chicago"
                 )).collect(Collectors.toList());
     }
 }
