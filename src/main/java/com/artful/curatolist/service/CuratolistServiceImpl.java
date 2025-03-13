@@ -8,6 +8,7 @@ import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.CLPage;
 import com.artful.curatolist.model.ChicagoPage;
 import com.artful.curatolist.model.HarvardPage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class CuratolistServiceImpl implements CuratolistService{
 
-    @Autowired
-    ChicagoClient chicagoClient;
-    @Autowired
-    ChicagoMapper chicagoMapper;
-    @Autowired
-    HarvardClient harvardClient;
-    @Autowired
-    HarvardMapper harvardMapper;
+    private final ChicagoClient chicagoClient;
+    private final ChicagoMapper chicagoMapper;
+    private final HarvardClient harvardClient;
+    private final HarvardMapper harvardMapper;
 
     @Override
     public CLPage getArt(int page, int limit) {
