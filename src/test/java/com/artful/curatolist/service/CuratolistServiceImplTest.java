@@ -45,7 +45,7 @@ class CuratolistServiceImplTest {
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
-        CLPage results = curatolistService.getArt(1,2);
+        CLPage results = curatolistService.getArt(1,2).block();
 
         verify(harvardClient, times(1)).getHarvardArtwork(1, 1);
         verify(chicagoClient, times(1)).getChicagoArtwork(1, 1);

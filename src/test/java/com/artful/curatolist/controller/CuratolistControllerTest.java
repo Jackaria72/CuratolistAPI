@@ -2,32 +2,25 @@ package com.artful.curatolist.controller;
 
 import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.CLPage;
-import com.artful.curatolist.service.CuratolistService;
 import com.artful.curatolist.service.CuratolistServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebFluxTest
 class CuratolistControllerTest {
     @MockBean
     private CuratolistServiceImpl curatolistService;
@@ -35,22 +28,26 @@ class CuratolistControllerTest {
     private CuratolistController curatolistController;
 
     @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient webTestClient;
 
     @Test
     void testGetArtwork() throws Exception {
-        when(curatolistService.getArt(1,4)).thenReturn(getMockPage());
+        when(curatolistService.getArt(1,4)).thenReturn(Mono.just(getMockPage()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/curatolist/api/v1")
-                        .param("page", "1")
-                        .param("limit", "4"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageInfo").isNotEmpty())
-                .andExpect(jsonPath("$.artwork").isNotEmpty())
-                .andExpect(jsonPath("$.artwork[0].title").value((getMockPage().artwork().getFirst().title())))
-                .andExpect(jsonPath("$.artwork[1].title").value((getMockPage().artwork().get(1).title())))
-                .andExpect(jsonPath("$.artwork[2].title").value((getMockPage().artwork().get(2).title())))
-                .andExpect(jsonPath("$.artwork[3].title").value((getMockPage().artwork().getLast().title())));
+        webTestClient.get().uri(uriBuilder ->
+                        uriBuilder.path("/curatolist/api/v1")
+                                .queryParam("page", "1")
+                                .queryParam("limit", "4")
+                                .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.pageInfo").isNotEmpty()
+                .jsonPath("$.artwork").isNotEmpty()
+                .jsonPath("$.artwork[0].title").isEqualTo(getMockPage().artwork().getFirst().title())
+                .jsonPath("$.artwork[1].title").isEqualTo(getMockPage().artwork().get(1).title())
+                .jsonPath("$.artwork[2].title").isEqualTo(getMockPage().artwork().get(2).title())
+                .jsonPath("$.artwork[3].title").isEqualTo(getMockPage().artwork().getLast().title());
 
     }
 
