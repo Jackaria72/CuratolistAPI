@@ -1,7 +1,8 @@
 package com.artful.curatolist.service;
 
 import com.artful.curatolist.model.CLPage;
+import reactor.core.publisher.Mono;
 
 public interface CuratolistService {
-    CLPage getArt(int page, int limit);
+    Mono<CLPage> getArt(int page, int limit);
 }

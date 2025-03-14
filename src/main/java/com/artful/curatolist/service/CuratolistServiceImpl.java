@@ -8,11 +8,9 @@ import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.CLPage;
 import com.artful.curatolist.model.ChicagoPage;
 import com.artful.curatolist.model.HarvardPage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -34,23 +32,31 @@ public class CuratolistServiceImpl implements CuratolistService{
 
 
     @Override
-    public CLPage getArt(int page, int limit) {
+    public Mono<CLPage> getArt(int page, int limit) {
         int halfLimit = limit/2;
 
-        HarvardPage harvardRaw = harvardClient.getHarvardArtwork(page, halfLimit).block();
-        ChicagoPage chicagoRaw = chicagoClient.getChicagoArtwork(page, halfLimit).block();
-        List<CLArtwork> harvard = harvardMapper.mapHarvardArt(harvardRaw);
-        List<CLArtwork> chicago = chicagoMapper.mapChicagoArt(chicagoRaw);
-        CLPage.PageInfo pageInfo = new CLPage.PageInfo(
-                chicagoRaw.pagination().total(),
-                chicagoRaw.pagination().total_pages(),
-                harvardRaw.info().totalrecords(),
-                harvardRaw.info().pages());
+        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page, halfLimit);
+        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page, halfLimit);
 
-        List<CLArtwork> combined = Stream.of(harvard, chicago)
-                .flatMap(Collection::stream)
-                .toList();
+        return Mono.zip(harvardMono, chicagoMono)
+                .map(tuple -> {
+                    HarvardPage harvardRaw = tuple.getT1();
+                    ChicagoPage chicagoRaw = tuple.getT2();
 
-        return new CLPage(pageInfo, combined);
+                    List<CLArtwork> harvard = harvardMapper.mapHarvardArt(harvardRaw);
+                    List<CLArtwork> chicago = chicagoMapper.mapChicagoArt(chicagoRaw);
+
+                    CLPage.PageInfo pageInfo = new CLPage.PageInfo(
+                            chicagoRaw.pagination().total(),
+                            chicagoRaw.pagination().total_pages(),
+                            harvardRaw.info().totalrecords(),
+                            harvardRaw.info().pages());
+
+                    List<CLArtwork> combined = Stream.of(harvard, chicago)
+                            .flatMap(Collection::stream)
+                            .toList();
+
+                    return new CLPage(pageInfo, combined);
+                });
     }
 }
