@@ -60,7 +60,7 @@ class HarvardClientTest {
                         .setBody(mockResponse)
         );
 //        System.out.println(mockWebServer.takeRequest().getBody().readUtf8());
-        HarvardPage results = testHarvardClient.getHarvardArtwork(1,1).block();
+        HarvardPage results = testHarvardClient.getHarvardArtwork(1).block();
 
         System.out.println(results);
         assertNotNull(results);
@@ -73,7 +73,7 @@ class HarvardClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1, 10);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ResourcesNotFoundException.class)
@@ -84,7 +84,7 @@ class HarvardClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1,10);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ExternalApiException.class)

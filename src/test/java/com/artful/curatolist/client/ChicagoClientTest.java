@@ -56,7 +56,7 @@ class ChicagoClientTest {
                 new MockResponse().setHeader("Content-Type", "application/json")
                         .setBody(mockResponse)
         );
-        ChicagoPage results = testChicagoClient.getChicagoArtwork(1,1).block();
+        ChicagoPage results = testChicagoClient.getChicagoArtwork(1).block();
 
         assertNotNull(results);
         assertNotNull(results.data());
@@ -68,7 +68,7 @@ class ChicagoClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404));
 
-        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1, 10);
+        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ResourcesNotFoundException.class)
@@ -79,7 +79,7 @@ class ChicagoClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500));
 
-        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1,10);
+        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ExternalApiException.class)

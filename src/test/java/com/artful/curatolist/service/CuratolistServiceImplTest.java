@@ -44,15 +44,15 @@ class CuratolistServiceImplTest {
         List<CLArtwork> chicagoMapped = List.of(new CLArtwork("AIC1","Test Title 1","Test Artist 1", "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago"));
         List<CLArtwork> harvardMapped = List.of(new CLArtwork("HVD1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test URL 1", "Harvard"));
 
-        when(chicagoClient.getChicagoArtwork(1,1)).thenReturn(Mono.just(mockChicagoPage));
-        when(harvardClient.getHarvardArtwork(1,1)).thenReturn(Mono.just(mockHarvardPage));
+        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.just(mockChicagoPage));
+        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.just(mockHarvardPage));
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
-        CLPage results = curatolistService.getArt(1,2).block();
+        CLPage results = curatolistService.getArt(1).block();
 
-        verify(harvardClient, times(1)).getHarvardArtwork(1, 1);
-        verify(chicagoClient, times(1)).getChicagoArtwork(1, 1);
+        verify(harvardClient, times(1)).getHarvardArtwork(1);
+        verify(chicagoClient, times(1)).getChicagoArtwork(1);
         verify(harvardMapper, times(1)).mapHarvardArt(mockHarvardPage);
         verify(chicagoMapper, times(1)).mapChicagoArt(mockChicagoPage);
 
@@ -69,11 +69,11 @@ class CuratolistServiceImplTest {
                 List.of(new ChicagoPage.ChicagoArt(1,"Test Art 1","Test Artist 1", 1800,1800,"1800", "Test ID 1")));
         List<CLArtwork> chicagoMapped = List.of(new CLArtwork("AIC1","Test Title 1","Test Artist 1", "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago"));
 
-        when(harvardClient.getHarvardArtwork(1,1)).thenReturn(Mono.error(new ExternalApiException("Harvard API Error")));
-        when(chicagoClient.getChicagoArtwork(1,1)).thenReturn(Mono.just(mockChicagoPage));
+        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Harvard API Error")));
+        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.just(mockChicagoPage));
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
 
-        Mono<CLPage> result = curatolistService.getArt(1,2);
+        Mono<CLPage> result = curatolistService.getArt(1);
 
         StepVerifier.create(result)
                 .assertNext(clPage -> {
@@ -90,11 +90,11 @@ class CuratolistServiceImplTest {
         List<CLArtwork> harvardMapped = List.of(new CLArtwork("HVD1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test URL 1", "Harvard"));
 
 
-        when(chicagoClient.getChicagoArtwork(1,1)).thenReturn(Mono.error(new ExternalApiException("Chicago API Error")));
-        when(harvardClient.getHarvardArtwork(1,1)).thenReturn(Mono.just(mockHarvardPage));
+        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Chicago API Error")));
+        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.just(mockHarvardPage));
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
-        Mono<CLPage> result = curatolistService.getArt(1,2);
+        Mono<CLPage> result = curatolistService.getArt(1);
 
         StepVerifier.create(result)
                 .assertNext(clPage -> {
@@ -106,10 +106,10 @@ class CuratolistServiceImplTest {
 
     @Test
     void testGetArtThrowsExceptionWhenBothApisFail() {
-        when(harvardClient.getHarvardArtwork(1,1)).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
-        when(chicagoClient.getChicagoArtwork(1,1)).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
+        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
+        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
 
-        Mono<CLPage> result = curatolistService.getArt(1,2);
+        Mono<CLPage> result = curatolistService.getArt(1);
 
         StepVerifier.create(result)
                 .expectError(ResourcesNotFoundException.class)
