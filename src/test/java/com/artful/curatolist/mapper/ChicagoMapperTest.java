@@ -25,11 +25,11 @@ class ChicagoMapperTest {
         assertThat(result).hasSize(2);
         assertThat(result.getFirst())
                 .extracting(CLArtwork::id, CLArtwork::title, CLArtwork::artist, CLArtwork::date, CLArtwork::period, CLArtwork::imageUrl, CLArtwork::source)
-                .containsExactly("AIC1", "Test Art 1", "Test Artist 1" , "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago");
+                .containsExactly("AIC1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test ID 1", "Art Institute of Chicago");
 
         assertThat(result.getLast())
                 .extracting(CLArtwork::id, CLArtwork::title, CLArtwork::artist, CLArtwork::date, CLArtwork::period, CLArtwork::imageUrl, CLArtwork::source)
-                .containsExactly("AIC2", "Test Art 2", "Test Artist 2" , "1900 - 1900", "1900", "Test ID 2", "Art Institute of Chicago");
+                .containsExactly("AIC2", "Test Art 2", "Test Artist 2" , "1900", "1900", "Test ID 2", "Art Institute of Chicago");
 
     }
 
