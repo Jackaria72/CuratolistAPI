@@ -2,6 +2,7 @@ package com.artful.curatolist.service;
 
 import com.artful.curatolist.client.ChicagoClient;
 import com.artful.curatolist.client.HarvardClient;
+import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
 import com.artful.curatolist.mapper.ChicagoMapper;
 import com.artful.curatolist.mapper.HarvardMapper;
 import com.artful.curatolist.model.CLArtwork;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,8 +37,10 @@ public class CuratolistServiceImpl implements CuratolistService{
     public Mono<CLPage> getArt(int page, int limit) {
         int halfLimit = limit/2;
 
-        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page, halfLimit);
-        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page, halfLimit);
+        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page, halfLimit)
+                .onErrorResume(ex -> Mono.just(new HarvardPage(new HarvardPage.HarvardPageInfo(0,0), Collections.emptyList())));
+        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page, halfLimit)
+                .onErrorResume(ex -> Mono.just(new ChicagoPage(new ChicagoPage.ChicagoPageInfo(0,0), Collections.emptyList())));
 
         return Mono.zip(harvardMono, chicagoMono)
                 .map(tuple -> {
@@ -55,6 +59,9 @@ public class CuratolistServiceImpl implements CuratolistService{
                     List<CLArtwork> combined = Stream.of(harvard, chicago)
                             .flatMap(Collection::stream)
                             .toList();
+                    if (combined.isEmpty()) {
+                        throw new ResourcesNotFoundException("No Results Available");
+                    }
 
                     return new CLPage(pageInfo, combined);
                 });
