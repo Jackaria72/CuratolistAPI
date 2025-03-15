@@ -2,7 +2,6 @@ package com.artful.curatolist.client;
 
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
-import com.artful.curatolist.model.ChicagoPage;
 import com.artful.curatolist.model.HarvardPage;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

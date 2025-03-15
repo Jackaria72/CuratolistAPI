@@ -2,14 +2,12 @@ package com.artful.curatolist.mapper;
 
 import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.ChicagoPage;
-import com.artful.curatolist.model.HarvardPage;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChicagoMapperTest {
 
