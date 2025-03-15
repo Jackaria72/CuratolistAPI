@@ -1,5 +1,7 @@
 package com.artful.curatolist.client;
 
+import com.artful.curatolist.controller.exception.ExternalApiException;
+import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
 import com.artful.curatolist.model.ChicagoPage;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -7,6 +9,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
@@ -57,5 +61,28 @@ class ChicagoClientTest {
         assertNotNull(results);
         assertNotNull(results.data());
         assertEquals(1, results.data().size());
+    }
+
+    @Test
+    void testChicagoThrowResourcesNotFoundWhenApiReturns404() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(404));
+
+        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1, 10);
+
+        StepVerifier.create(results)
+                .expectError(ResourcesNotFoundException.class)
+                .verify();
+    }
+    @Test
+    void testChicagoThrowExternalApiWhenApiReturnsError() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(500));
+
+        Mono<ChicagoPage> results = testChicagoClient.getChicagoArtwork(1,10);
+
+        StepVerifier.create(results)
+                .expectError(ExternalApiException.class)
+                .verify();
     }
 }

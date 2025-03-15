@@ -1,5 +1,8 @@
 package com.artful.curatolist.client;
 
+import com.artful.curatolist.controller.exception.ExternalApiException;
+import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
+import com.artful.curatolist.model.ChicagoPage;
 import com.artful.curatolist.model.HarvardPage;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -7,6 +10,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
@@ -61,5 +66,28 @@ class HarvardClientTest {
         assertNotNull(results);
         assertNotNull(results.records());
         assertEquals(1, results.records().size());
+    }
+
+    @Test
+    void testHarvardThrowResourcesNotFoundWhenApiReturns404() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(404));
+
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1, 10);
+
+        StepVerifier.create(results)
+                .expectError(ResourcesNotFoundException.class)
+                .verify();
+    }
+    @Test
+    void testHarvardThrowExternalApiWhenApiReturnsError() throws Exception {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(500));
+
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1,10);
+
+        StepVerifier.create(results)
+                .expectError(ExternalApiException.class)
+                .verify();
     }
 }

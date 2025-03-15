@@ -4,6 +4,7 @@ import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.ChicagoPage;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,9 @@ import java.util.stream.Collectors;
 public class ChicagoMapper {
 
     public List<CLArtwork> mapChicagoArt(ChicagoPage page) {
+        if (page == null || page.data() == null || page.data().isEmpty()) {
+            return Collections.emptyList();
+        }
         return page.data().stream()
                 .map(art -> new CLArtwork(
                         "AIC"+String.valueOf(art.id()),
