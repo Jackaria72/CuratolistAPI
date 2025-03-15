@@ -3,7 +3,6 @@ package com.artful.curatolist.client;
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
 import com.artful.curatolist.model.ChicagoPage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -21,14 +20,14 @@ public class ChicagoClient {
         this.webClient = webclientBuilder.build();
     }
 
-    public Mono<ChicagoPage> getChicagoArtwork(int page, int limit) {
+    public Mono<ChicagoPage> getChicagoArtwork(int page) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
                 .path("/artworks/search")
                 .queryParam("query[term][is_public_domain]","true")
                 .queryParam("fields", "id,title,artist_title,date_start,date_end,date_display,image_id,is_public_domain")
                 .queryParam("page", page)
-                .queryParam("limit", limit)
+                .queryParam("limit", 100)
                 .build())
                 .retrieve().bodyToMono(ChicagoPage.class).onErrorResume(WebClientResponseException.class, ex -> {
                     if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {

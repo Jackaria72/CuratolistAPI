@@ -34,12 +34,11 @@ public class CuratolistServiceImpl implements CuratolistService{
 
 
     @Override
-    public Mono<CLPage> getArt(int page, int limit) {
-        int halfLimit = limit/2;
+    public Mono<CLPage> getArt(int page) {
 
-        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page, halfLimit)
+        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page)
                 .onErrorResume(ex -> Mono.just(new HarvardPage(new HarvardPage.HarvardPageInfo(0,0), Collections.emptyList())));
-        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page, halfLimit)
+        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page)
                 .onErrorResume(ex -> Mono.just(new ChicagoPage(new ChicagoPage.ChicagoPageInfo(0,0), Collections.emptyList())));
 
         return Mono.zip(harvardMono, chicagoMono)

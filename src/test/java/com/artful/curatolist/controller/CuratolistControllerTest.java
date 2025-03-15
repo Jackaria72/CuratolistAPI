@@ -9,16 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebFluxTest
 class CuratolistControllerTest {
@@ -32,7 +28,7 @@ class CuratolistControllerTest {
 
     @Test
     void testGetArtwork() throws Exception {
-        when(curatolistService.getArt(1,4)).thenReturn(Mono.just(getMockPage()));
+        when(curatolistService.getArt(1)).thenReturn(Mono.just(getMockPage()));
 
         webTestClient.get().uri(uriBuilder ->
                         uriBuilder.path("/curatolist/api/v1")

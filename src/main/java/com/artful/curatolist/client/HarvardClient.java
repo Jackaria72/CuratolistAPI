@@ -3,7 +3,6 @@ package com.artful.curatolist.client;
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
 import com.artful.curatolist.model.HarvardPage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class HarvardClient {
         this.API_KEY = apiKey;
     }
 
-    public Mono<HarvardPage> getHarvardArtwork(int page, int limit) {
+    public Mono<HarvardPage> getHarvardArtwork(int page) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
                         .path("/object")
@@ -32,7 +31,7 @@ public class HarvardClient {
                         .queryParam("q", "imagepermissionlevel:0")
                         .queryParam("fields", "id,title,people,dated,period,primaryimageurl")
                         .queryParam("page", page)
-                        .queryParam("limit", limit)
+                        .queryParam("size", 100)
                         .build())
                 .retrieve().bodyToMono(HarvardPage.class)
                 .onErrorResume(WebClientResponseException.class, ex -> {

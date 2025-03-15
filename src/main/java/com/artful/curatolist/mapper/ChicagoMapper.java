@@ -17,11 +17,11 @@ public class ChicagoMapper {
         }
         return page.data().stream()
                 .map(art -> new CLArtwork(
-                        "AIC"+String.valueOf(art.id()),
-                        art.title(),
-                        art.artist_title(),
-                        String.valueOf(art.date_start())+" - "+String.valueOf(art.date_end()),
-                        art.date_display(),
+                        "AIC"+art.id(),
+                        art.title() == null ? "Unknown" : art.title(),
+                        art.artist_title() == null ? "Unknown" : art.artist_title(),
+                        String.valueOf(art.date_end()),
+                        art.date_display() == null ? "Unknown" : art.date_display(),
                         art.image_id(),
                         "Art Institute of Chicago"
                 )).collect(Collectors.toList());

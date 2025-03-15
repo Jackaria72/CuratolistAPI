@@ -2,7 +2,6 @@ package com.artful.curatolist.client;
 
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
-import com.artful.curatolist.model.ChicagoPage;
 import com.artful.curatolist.model.HarvardPage;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -60,7 +59,7 @@ class HarvardClientTest {
                         .setBody(mockResponse)
         );
 //        System.out.println(mockWebServer.takeRequest().getBody().readUtf8());
-        HarvardPage results = testHarvardClient.getHarvardArtwork(1,1).block();
+        HarvardPage results = testHarvardClient.getHarvardArtwork(1).block();
 
         System.out.println(results);
         assertNotNull(results);
@@ -73,7 +72,7 @@ class HarvardClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1, 10);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ResourcesNotFoundException.class)
@@ -84,7 +83,7 @@ class HarvardClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1,10);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
 
         StepVerifier.create(results)
                 .expectError(ExternalApiException.class)
