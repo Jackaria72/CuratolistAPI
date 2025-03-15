@@ -38,29 +38,32 @@ class CuratolistServiceImplTest {
     @Test
     void testGetArt() {
         ChicagoPage mockChicagoPage = new ChicagoPage(new ChicagoPage.ChicagoPageInfo(1,1),
-                List.of(new ChicagoPage.ChicagoArt(1,"Test Art 1","Test Artist 1", 1800,1800,"1800", "Test ID 1")));
+                List.of(new ChicagoPage.ChicagoArt(1,"Test Art 1","Test Artist 1",1800,1800,"1800","Test ID 1")));
         HarvardPage mockHarvardPage = new HarvardPage(new HarvardPage.HarvardPageInfo(1,1),
                 List.of(new HarvardPage.HarvardArt(1,"Test Art 1", List.of(new HarvardPage.Person("Test Artist 1")), "1800", "1800", "Test URL 1")));
         List<CLArtwork> chicagoMapped = List.of(new CLArtwork("AIC1","Test Title 1","Test Artist 1", "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago"));
-        List<CLArtwork> harvardMapped = List.of(new CLArtwork("HVD1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test URL 1", "Harvard"));
+        List<CLArtwork> harvardMapped = List.of(new CLArtwork("HVD1", "Test Art 1", "Test Artist 1","1800", "1800", "Test URL 1", "Harvard"));
 
         when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.just(mockChicagoPage));
         when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.just(mockHarvardPage));
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
-        CLPage results = curatolistService.getArt(1).block();
+        Mono<CLPage> results = curatolistService.getArt(1);
 
-        verify(harvardClient, times(1)).getHarvardArtwork(1);
-        verify(chicagoClient, times(1)).getChicagoArtwork(1);
-        verify(harvardMapper, times(1)).mapHarvardArt(mockHarvardPage);
-        verify(chicagoMapper, times(1)).mapChicagoArt(mockChicagoPage);
 
-        assertNotNull(results);
-        assertEquals(2, results.artwork().size());
-        assertTrue(results.artwork().containsAll(chicagoMapped));
-        assertTrue(results.artwork().containsAll(harvardMapped));
 
+        StepVerifier.create(results)
+                .assertNext(clPage -> {
+                    verify(harvardClient, times(1)).getHarvardArtwork(1);
+                    verify(chicagoClient, times(1)).getChicagoArtwork(1);
+                    verify(harvardMapper, times(1)).mapHarvardArt(mockHarvardPage);
+                    verify(chicagoMapper, times(1)).mapChicagoArt(mockChicagoPage);
+                    assertNotNull(clPage);
+                    assertEquals(2, clPage.artwork().size());
+                    assertTrue(clPage.artwork().containsAll(chicagoMapped));
+                    assertTrue(clPage.artwork().containsAll(harvardMapped));
+                }).verifyComplete();
     }
 
     @Test
