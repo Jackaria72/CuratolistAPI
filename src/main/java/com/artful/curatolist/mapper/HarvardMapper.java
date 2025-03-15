@@ -17,11 +17,11 @@ public class HarvardMapper {
         }
         return page.records().stream()
                 .map(art -> new CLArtwork(
-                        "HVD"+String.valueOf(art.id()),
-                        art.title(),
-                        art.people().getFirst().name(),
-                        art.dated(),
-                        art.period(),
+                        "HVD"+art.id(),
+                        art.title() == null ? "Unknown" : art.title(),
+                        art.people() == null || art.people().isEmpty() ? "Unknown" : art.people().getFirst().name(),
+                        art.dated() == null ? "Unknown" : art.dated(),
+                        art.period() == null ? "Unknown" : art.period(),
                         art.primaryimageurl(),
                         "Harvard"
                 )).collect(Collectors.toList());
