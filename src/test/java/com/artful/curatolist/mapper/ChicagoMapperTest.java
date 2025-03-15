@@ -2,8 +2,10 @@ package com.artful.curatolist.mapper;
 
 import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.ChicagoPage;
+import com.artful.curatolist.model.HarvardPage;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,5 +33,19 @@ class ChicagoMapperTest {
                 .extracting(CLArtwork::id, CLArtwork::title, CLArtwork::artist, CLArtwork::date, CLArtwork::period, CLArtwork::imageUrl, CLArtwork::source)
                 .containsExactly("AIC2", "Test Art 2", "Test Artist 2" , "1900 - 1900", "1900", "Test ID 2", "Art Institute of Chicago");
 
+    }
+
+    @Test
+    void testMapChicagoArtReturnsEmptyListWhenNoResults() {
+        ChicagoPage.ChicagoPageInfo pageInfo = new ChicagoPage.ChicagoPageInfo(2,1);
+        List<ChicagoPage.ChicagoArt> chicagoArt = Collections.emptyList();
+        ChicagoPage mockEmptyListChicagoPage = new ChicagoPage(pageInfo, chicagoArt);
+        ChicagoPage mockNullChicagoPage = new ChicagoPage(null, null);
+
+        List<CLArtwork> nullResult = chicagoMapper.mapChicagoArt(mockNullChicagoPage);
+        List<CLArtwork> emptyListResult = chicagoMapper.mapChicagoArt(mockEmptyListChicagoPage);
+
+        assertThat(nullResult).isEmpty();
+        assertThat(emptyListResult).isEmpty();
     }
 }
