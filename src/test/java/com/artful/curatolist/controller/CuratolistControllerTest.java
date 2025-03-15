@@ -1,5 +1,6 @@
 package com.artful.curatolist.controller;
 
+import com.artful.curatolist.TestUtilityMethods;
 import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.CLPage;
 import com.artful.curatolist.service.CuratolistServiceImpl;
@@ -28,33 +29,40 @@ class CuratolistControllerTest {
 
     @Test
     void testGetArtwork() throws Exception {
-        when(curatolistService.getArt(1)).thenReturn(Mono.just(getMockPage()));
+        when(curatolistService.getArt(1)).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
 
         webTestClient.get().uri(uriBuilder ->
                         uriBuilder.path("/curatolist/api/v1")
                                 .queryParam("page", "1")
-                                .queryParam("limit", "4")
+                                .queryParam("limit", "10")
                                 .build())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$.pageInfo").isNotEmpty()
-                .jsonPath("$.artwork").isNotEmpty()
-                .jsonPath("$.artwork[0].title").isEqualTo(getMockPage().artwork().getFirst().title())
-                .jsonPath("$.artwork[1].title").isEqualTo(getMockPage().artwork().get(1).title())
-                .jsonPath("$.artwork[2].title").isEqualTo(getMockPage().artwork().get(2).title())
-                .jsonPath("$.artwork[3].title").isEqualTo(getMockPage().artwork().getLast().title());
+                .jsonPath("$.artwork").isNotEmpty();
 
+        for (int i = 0; i < TestUtilityMethods.getMockCLPage().artwork().size(); i++) {
+            webTestClient.get()
+                    .uri(uriBuilder ->
+                            uriBuilder.path("/curatolist/api/v1")
+                                    .queryParam("page", "1")
+                                    .queryParam("limit", "10")
+                                    .build())
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.artwork[" + i + "].id")
+                    .isEqualTo(TestUtilityMethods.getMockCLPage().artwork().get(i).id())
+                    .jsonPath("$.artwork[" + i + "].title")
+                    .isEqualTo(TestUtilityMethods.getMockCLPage().artwork().get(i).title())
+                    .jsonPath("$.artwork[" + i + "].artist")
+                    .isEqualTo(TestUtilityMethods.getMockCLPage().artwork().get(i).artist())
+                    .jsonPath("$.artwork[" + i + "].date")
+                    .isEqualTo(TestUtilityMethods.getMockCLPage().artwork().get(i).date())
+                    .jsonPath("$.artwork[" + i + "].imageUrl")
+                    .isEqualTo(TestUtilityMethods.getMockCLPage().artwork().get(i).imageUrl());
+        }
     }
 
-    private static CLPage getMockPage() {
-        CLPage.PageInfo pageInfo = new CLPage.PageInfo(2,1,2,1);
-        List<CLArtwork> artworks = List.of(
-        new CLArtwork("AIC1", "Test Art 1", "Test Artist 1" , "1800 - 1800", "1800", "Test ID 1", "Art Institute of Chicago"),
-        new CLArtwork("AIC2", "Test Art 2", "Test Artist 2" , "1900 - 1900", "1900", "Test ID 2", "Art Institute of Chicago"),
-        new CLArtwork("HVD1", "Test Art 1", "Test Artist 1" , "1800", "1800", "Test URL 1", "Harvard"),
-        new CLArtwork("HVD2", "Test Art 2", "Test Artist 2" , "1900", "1900", "Test URL 2", "Harvard")
-        );
-        return new CLPage(pageInfo, artworks);
-    }
 }
