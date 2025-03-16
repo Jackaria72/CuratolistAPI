@@ -19,7 +19,8 @@ public class CuratolistController {
     private CuratolistService curatolistService;
 
     @GetMapping
-    public ResponseEntity<Mono<CLPage>> getArtwork(@RequestParam(name = "page", defaultValue = "1") int page) {
-       return new ResponseEntity<>(curatolistService.getArt(page), HttpStatus.OK);
+    public ResponseEntity<Mono<CLPage>> getArtwork(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                   @RequestParam(name = "source", defaultValue = "both") String source) {
+       return new ResponseEntity<>(curatolistService.getArt(page, source), HttpStatus.OK);
     }
 }

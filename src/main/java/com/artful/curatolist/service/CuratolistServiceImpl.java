@@ -24,12 +24,21 @@ public class CuratolistServiceImpl implements CuratolistService{
 
 
     @Override
-    public Mono<CLPage> getArt(int page) {
+    public Mono<CLPage> getArt(int page, String source) {
 
-        Mono<CLPage> harvardMono = harvardService.getArt(page)
-                .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
-        Mono<CLPage> chicagoMono = chicagoService.getArt(page)
-                .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+        Mono<CLPage> harvardMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList()));
+        Mono<CLPage> chicagoMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList()));
+
+        switch (source.toLowerCase()) {
+            case "chicago" -> chicagoMono = chicagoService.getArt(page);
+            case "harvard" -> harvardMono = harvardService.getArt(page);
+            case "both" -> {
+                harvardMono = harvardService.getArt(page)
+                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+                chicagoMono = chicagoService.getArt(page)
+                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+            }
+        }
 
         return Mono.zip(harvardMono, chicagoMono)
                 .map(tuple -> {

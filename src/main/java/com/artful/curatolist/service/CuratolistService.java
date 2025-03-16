@@ -4,5 +4,5 @@ import com.artful.curatolist.model.CLPage;
 import reactor.core.publisher.Mono;
 
 public interface CuratolistService {
-    Mono<CLPage> getArt(int page);
+    Mono<CLPage> getArt(int page, String source);
 }
