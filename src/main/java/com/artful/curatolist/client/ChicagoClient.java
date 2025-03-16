@@ -25,7 +25,7 @@ public class ChicagoClient {
         return webClient.get().uri(uriBuilder -> uriBuilder
                 .path("/artworks/search")
                 .queryParam("query[term][is_public_domain]","true")
-                .queryParam("fields", "id,title,artist_title,date_start,date_end,date_display,image_id,is_public_domain")
+                .queryParam("fields", "id,title,artist_title,date_start,date_end,date_display,image_id,is_public_domain,medium_display,dimensions,classification_title,place_of_origin,technique_titles")
                 .queryParam("page", page)
                 .queryParam("limit", 100)
                 .build())
