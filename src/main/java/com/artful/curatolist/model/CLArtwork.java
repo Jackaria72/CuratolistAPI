@@ -6,6 +6,11 @@ public record CLArtwork(
    String artist,
    String date,
    String period,
+   String medium,
+   String technique,
+   String classification,
+   String culturalOrigin,
+   String dimensions,
    String imageUrl,
    String source
 ) {}

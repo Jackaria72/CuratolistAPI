@@ -29,7 +29,7 @@ public class HarvardClient {
                         .path("/object")
                         .queryParam("apikey",API_KEY)
                         .queryParam("q", "imagepermissionlevel:0")
-                        .queryParam("fields", "id,title,people,dated,period,primaryimageurl")
+                        .queryParam("fields", "id,title,people,dated,period,medium,dimensions,classification,culture,technique,primaryimageurl")
                         .queryParam("page", page)
                         .queryParam("size", 100)
                         .build())

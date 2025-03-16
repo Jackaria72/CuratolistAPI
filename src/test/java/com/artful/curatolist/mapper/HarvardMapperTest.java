@@ -42,4 +42,25 @@ class HarvardMapperTest {
         assertThat(nullResult).isEmpty();
         assertThat(emptyListResult).isEmpty();
     }
+
+    @Test
+    void testExtractArtistCorrectlyExtractsArtist() {
+        List<HarvardPage.Person> person1 = List.of(new HarvardPage.Person("Bob Ross", "Artist"));
+        List<HarvardPage.Person> person2 = List.of(new HarvardPage.Person("Michael", "Coin Constituent"));
+        List<HarvardPage.Person> person3 = List.of(new HarvardPage.Person("John", null));
+        List<HarvardPage.Person> person4 = List.of(new HarvardPage.Person(null, null));
+        List<HarvardPage.Person> person5 = null;
+
+        String result1 = harvardMapper.extractArtist(person1);
+        String result2 = harvardMapper.extractArtist(person2);
+        String result3 = harvardMapper.extractArtist(person3);
+        String result4 = harvardMapper.extractArtist(person4);
+        String result5 = harvardMapper.extractArtist(person5);
+
+        assertThat(result1).isEqualTo("Bob Ross");
+        assertThat(result2).isEqualTo("Unknown Artist");
+        assertThat(result3).isEqualTo("Unknown Artist");
+        assertThat(result4).isEqualTo("Unknown Artist");
+        assertThat(result5).isEqualTo("Unknown Artist");
+    }
 }

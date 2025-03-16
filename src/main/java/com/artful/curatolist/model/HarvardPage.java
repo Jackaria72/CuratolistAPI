@@ -13,7 +13,16 @@ public record HarvardPage(HarvardPageInfo info, List<HarvardArt> records) {
             List<Person> people,
             String dated,
             String period,
-            String primaryimageurl
+            String medium,
+            String technique,
+            String classification,
+            String culture,
+            String dimensions,
+            String primaryimageurl,
+            int imagepermissionlevel
     ){}
-    public record Person(String name){}
+    public record Person(
+            String name,
+            String role
+    ){}
 }
