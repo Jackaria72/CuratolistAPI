@@ -27,7 +27,7 @@ class HarvardClientTest {
         mockWebServer = new MockWebServer();
         WebClient.Builder mockWebClient = WebClient.builder()
                 .baseUrl(mockWebServer.url("/").toString());
-        testHarvardClient = new HarvardClient(mockWebClient, "API_KEY");
+        testHarvardClient = new HarvardClient(mockWebClient);
         mockResponse = "{" +
                 "\"info\" : {" +
                 "\"totalrecords\": 183815," +
