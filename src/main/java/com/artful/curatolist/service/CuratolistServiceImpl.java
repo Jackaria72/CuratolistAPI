@@ -1,14 +1,8 @@
 package com.artful.curatolist.service;
 
-import com.artful.curatolist.client.ChicagoClient;
-import com.artful.curatolist.client.HarvardClient;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
-import com.artful.curatolist.mapper.ChicagoMapper;
-import com.artful.curatolist.mapper.HarvardMapper;
 import com.artful.curatolist.model.CLArtwork;
 import com.artful.curatolist.model.CLPage;
-import com.artful.curatolist.model.ChicagoPage;
-import com.artful.curatolist.model.HarvardPage;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,47 +14,42 @@ import java.util.stream.Stream;
 @Service
 public class CuratolistServiceImpl implements CuratolistService{
 
-    private final ChicagoClient chicagoClient;
-    private final ChicagoMapper chicagoMapper;
-    private final HarvardClient harvardClient;
-    private final HarvardMapper harvardMapper;
+    private final ChicagoService chicagoService;
+    private final HarvardService harvardService;
 
-    public CuratolistServiceImpl(ChicagoClient chicagoClient, ChicagoMapper chicagoMapper, HarvardClient harvardClient, HarvardMapper harvardMapper) {
-        this.chicagoClient = chicagoClient;
-        this.chicagoMapper = chicagoMapper;
-        this.harvardClient = harvardClient;
-        this.harvardMapper = harvardMapper;
+    public CuratolistServiceImpl(ChicagoService chicagoService, HarvardService harvardService) {
+        this.chicagoService = chicagoService;
+        this.harvardService = harvardService;
     }
 
 
     @Override
     public Mono<CLPage> getArt(int page) {
 
-        Mono<HarvardPage> harvardMono = harvardClient.getHarvardArtwork(page)
-                .onErrorResume(ex -> Mono.just(new HarvardPage(new HarvardPage.HarvardPageInfo(0,0), Collections.emptyList())));
-        Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(page)
-                .onErrorResume(ex -> Mono.just(new ChicagoPage(new ChicagoPage.ChicagoPageInfo(0,0), Collections.emptyList())));
+        Mono<CLPage> harvardMono = harvardService.getArt(page)
+                .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+        Mono<CLPage> chicagoMono = chicagoService.getArt(page)
+                .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
 
         return Mono.zip(harvardMono, chicagoMono)
                 .map(tuple -> {
-                    HarvardPage harvardRaw = tuple.getT1();
-                    ChicagoPage chicagoRaw = tuple.getT2();
+                    CLPage harvard = tuple.getT1();
+                    CLPage chicago = tuple.getT2();
 
-                    List<CLArtwork> harvard = harvardMapper.mapHarvardArt(harvardRaw);
-                    List<CLArtwork> chicago = chicagoMapper.mapChicagoArt(chicagoRaw);
+                    List<CLArtwork> harvardArt = harvard.artwork();
+                    List<CLArtwork> chicagoArt = chicago.artwork();
 
-                    CLPage.PageInfo pageInfo = new CLPage.PageInfo(
-                            chicagoRaw.pagination().total(),
-                            chicagoRaw.pagination().total_pages(),
-                            harvardRaw.info().totalrecords(),
-                            harvardRaw.info().pages());
-
-                    List<CLArtwork> combined = Stream.of(harvard, chicago)
+                    List<CLArtwork> combined = Stream.of(harvardArt, chicagoArt)
                             .flatMap(Collection::stream)
                             .toList();
                     if (combined.isEmpty()) {
                         throw new ResourcesNotFoundException("No Results Available");
                     }
+                    CLPage.PageInfo pageInfo = new CLPage.PageInfo(
+                            chicago.pageInfo().chicagoTotal(),
+                            chicago.pageInfo().chicagoPageTotal(),
+                            harvard.pageInfo().harvardTotal(),
+                            harvard.pageInfo().HarvardPageTotal());
 
                     return new CLPage(pageInfo, combined);
                 });
