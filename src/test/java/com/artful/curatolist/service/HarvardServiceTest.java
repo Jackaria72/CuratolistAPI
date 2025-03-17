@@ -36,7 +36,7 @@ class HarvardServiceTest {
         HarvardPage mockHarvardPage = TestUtilityMethods.getMockHarvardPage();
         List<CLArtwork> harvardMapped = TestUtilityMethods.getMockMappedHarvardArt();
 
-        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.just(mockHarvardPage));
+        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.just(mockHarvardPage));
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
         Mono<CLPage> results = harvardService.getArt(1);
@@ -45,7 +45,7 @@ class HarvardServiceTest {
 
         StepVerifier.create(results)
                 .assertNext(clPage -> {
-                    verify(harvardClient, times(1)).getHarvardArtwork(1);
+                    verify(harvardClient, times(1)).getHarvardArtwork(anyString());
                     verify(harvardMapper, times(1)).mapHarvardArt(mockHarvardPage);
                     assertNotNull(clPage);
                     assertEquals(harvardMapped.size(), clPage.artwork().size());
@@ -54,7 +54,7 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsExternalApiExceptionWhenApiFails() {
-        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
+        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
 
         Mono<CLPage> result = harvardService.getArt(1);
 
@@ -64,7 +64,7 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsResourcesNotFoundExceptionWhenApiFailsWhenResourcesNotFound() {
-        when(harvardClient.getHarvardArtwork(1)).thenReturn(Mono.error(new ResourcesNotFoundException("Harvard Error")));
+        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.error(new ResourcesNotFoundException("Harvard Error")));
 
         Mono<CLPage> result = harvardService.getArt(1);
 

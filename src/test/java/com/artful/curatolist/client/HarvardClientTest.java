@@ -58,21 +58,22 @@ class HarvardClientTest {
                 new MockResponse().setHeader("Content-Type", "application/json")
                         .setBody(mockResponse)
         );
-//        System.out.println(mockWebServer.takeRequest().getBody().readUtf8());
-        HarvardPage results = testHarvardClient.getHarvardArtwork(1).block();
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork("test-uri");
 
-        System.out.println(results);
-        assertNotNull(results);
-        assertNotNull(results.records());
-        assertEquals(1, results.records().size());
-    }
+        StepVerifier.create(results)
+                .assertNext(harvardPage -> {
+                    assertNotNull(harvardPage);
+                    assertNotNull(harvardPage.records());
+                    assertEquals(1, harvardPage.records().size());
+                })
+                .verifyComplete();    }
 
     @Test
     void testHarvardThrowResourcesNotFoundWhenApiReturns404() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork("test-uri");
 
         StepVerifier.create(results)
                 .expectError(ResourcesNotFoundException.class)
@@ -83,7 +84,7 @@ class HarvardClientTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500));
 
-        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork(1);
+        Mono<HarvardPage> results = testHarvardClient.getHarvardArtwork("test-uri");
 
         StepVerifier.create(results)
                 .expectError(ExternalApiException.class)

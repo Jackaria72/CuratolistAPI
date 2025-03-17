@@ -23,15 +23,10 @@ public class HarvardClient {
         this.API_KEY = apiKey;
     }
 
-    public Mono<HarvardPage> getHarvardArtwork(int page) {
+    public Mono<HarvardPage> getHarvardArtwork(String uri) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
-                        .path("/object")
-                        .queryParam("apikey",API_KEY)
-                        .queryParam("q", "imagepermissionlevel:0")
-                        .queryParam("fields", "id,title,people,dated,period,medium,dimensions,classification,culture,technique,primaryimageurl")
-                        .queryParam("page", page)
-                        .queryParam("size", 100)
+                        .path(uri)
                         .build())
                 .retrieve().bodyToMono(HarvardPage.class)
                 .onErrorResume(WebClientResponseException.class, ex -> {
