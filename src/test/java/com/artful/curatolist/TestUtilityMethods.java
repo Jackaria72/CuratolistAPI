@@ -60,4 +60,18 @@ public class TestUtilityMethods {
         ).toList();
         return new CLPage(pageInfo, artworks);
     }
+
+    public static CLPage getMockCLPageChicagoOnly() {
+        return new CLPage(
+                new CLPage.PageInfo(5,1,0,0),
+                getMockMappedChicagoArt()
+        );
+    }
+
+    public static CLPage getMockCLPageHarvardOnly() {
+        return new CLPage(
+                new CLPage.PageInfo(0,0,5,1),
+                getMockMappedHarvardArt()
+        );
+    }
 }
