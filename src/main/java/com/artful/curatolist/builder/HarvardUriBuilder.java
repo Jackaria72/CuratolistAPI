@@ -14,13 +14,16 @@ public class HarvardUriBuilder {
         this.API_KEY = apiKey;
     }
 
-    public String buildHarvardUri(int page) {
+    public String buildHarvardUri(int page, String searchQuery) {
         UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/object")
-                .queryParam("apikey",API_KEY)
+                .queryParam("apikey", API_KEY)
                 .queryParam("q", "imagepermissionlevel:0")
                 .queryParam("fields", "id,title,people,dated,period,medium,dimensions,classification,culture,technique,primaryimageurl")
                 .queryParam("page", page)
                 .queryParam("size", 100);
+        if (searchQuery != null) {
+            uri.queryParam("keyword", searchQuery);
+        }
         return uri.toUriString();
     }
 }

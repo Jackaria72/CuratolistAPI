@@ -25,8 +25,8 @@ public class HarvardService implements ApiService {
     }
 
     @Override
-    public Mono<CLPage> getArt(int page) {
-        String uri = harvardUriBuilder.buildHarvardUri(page);
+    public Mono<CLPage> getArt(int page, String searchQuery) {
+        String uri = harvardUriBuilder.buildHarvardUri(page, searchQuery);
         Mono<HarvardPage> harvardPageMono = harvardClient.getHarvardArtwork(uri);
 
         return harvardPageMono.map(
