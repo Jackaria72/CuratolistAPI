@@ -35,7 +35,7 @@ class ChicagoServiceTest {
         ChicagoPage mockChicagoPage = TestUtilityMethods.getMockChicagoPage();
         List<CLArtwork> chicagoMapped = TestUtilityMethods.getMockMappedChicagoArt();
 
-        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.just(mockChicagoPage));
+        when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.just(mockChicagoPage));
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
 
         Mono<CLPage> results = chicagoService.getArt(1);
@@ -44,7 +44,7 @@ class ChicagoServiceTest {
 
         StepVerifier.create(results)
                 .assertNext(clPage -> {
-                    verify(chicagoClient, times(1)).getChicagoArtwork(1);
+                    verify(chicagoClient, times(1)).getChicagoArtwork(anyString());
                     verify(chicagoMapper, times(1)).mapChicagoArt(mockChicagoPage);
                     assertNotNull(clPage);
                     assertEquals(chicagoMapped.size(), clPage.artwork().size());
@@ -53,7 +53,7 @@ class ChicagoServiceTest {
     }
     @Test
     void testGetArtThrowsExternalApiExceptionWhenApiFails() {
-                when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
+                when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
 
         Mono<CLPage> result = chicagoService.getArt(1);
 
@@ -63,7 +63,7 @@ class ChicagoServiceTest {
     }
     @Test
     void testGetArtThrowsResourcesNotFoundExceptionWhenApiFailsWhenResourcesNotFound() {
-        when(chicagoClient.getChicagoArtwork(1)).thenReturn(Mono.error(new ResourcesNotFoundException("Chicago Error")));
+        when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.error(new ResourcesNotFoundException("Chicago Error")));
 
         Mono<CLPage> result = chicagoService.getArt(1);
 

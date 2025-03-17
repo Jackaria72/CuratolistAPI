@@ -20,14 +20,10 @@ public class ChicagoClient {
         this.webClient = webclientBuilder.build();
     }
 
-    public Mono<ChicagoPage> getChicagoArtwork(int page) {
+    public Mono<ChicagoPage> getChicagoArtwork(String uri) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
-                .path("/artworks/search")
-                .queryParam("query[term][is_public_domain]","true")
-                .queryParam("fields", "id,title,artist_title,date_start,date_end,date_display,image_id,is_public_domain,medium_display,dimensions,classification_title,place_of_origin,technique_titles")
-                .queryParam("page", page)
-                .queryParam("limit", 100)
+                        .path(uri)
                 .build())
                 .retrieve().bodyToMono(ChicagoPage.class).onErrorResume(WebClientResponseException.class, ex -> {
                     if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
