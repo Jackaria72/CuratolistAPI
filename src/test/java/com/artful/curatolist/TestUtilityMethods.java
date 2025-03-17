@@ -34,21 +34,21 @@ public class TestUtilityMethods {
 
     public static List<CLArtwork> getMockMappedHarvardArt() {
         return List.of(
-                new CLArtwork("HVD-1", "Test Title 1", "Test Artist 1" , "1800", "1800", "Medium","Technique","Classification","Culture","Dimensions","Test URL 1","Harvard"),
-                new CLArtwork("HVD-2", "Test Title 2", "Test Artist 2" , "1850", "1850", "Medium","Technique","Classification","Culture","Dimensions","Test URL 2","Harvard"),
-                new CLArtwork("HVD-3", "Test Title 3", "Test Artist 3" , "1900", "1900", "Medium","Technique","Classification","Culture","Dimensions","Test URL 3","Harvard"),
-                new CLArtwork("HVD-4", "Test Title 4", "Test Artist 4" , "1950", "1950", "Medium","Technique","Classification","Culture","Dimensions","Test URL 4","Harvard"),
-                new CLArtwork("HVD-5", "Test Title 5", "Test Artist 5" , "2000", "2000", "Medium","Technique","Classification","Culture","Dimensions","Test URL 5","Harvard")
+                new CLArtwork("1_HVD", "Test Title 1", "Test Artist 1" , "1800", "1800", "Medium","Technique","Classification","Culture","Dimensions","Test URL 1","Harvard"),
+                new CLArtwork("2_HVD", "Test Title 2", "Test Artist 2" , "1850", "1850", "Medium","Technique","Classification","Culture","Dimensions","Test URL 2","Harvard"),
+                new CLArtwork("3_HVD", "Test Title 3", "Test Artist 3" , "1900", "1900", "Medium","Technique","Classification","Culture","Dimensions","Test URL 3","Harvard"),
+                new CLArtwork("4_HVD", "Test Title 4", "Test Artist 4" , "1950", "1950", "Medium","Technique","Classification","Culture","Dimensions","Test URL 4","Harvard"),
+                new CLArtwork("5_HVD", "Test Title 5", "Test Artist 5" , "2000", "2000", "Medium","Technique","Classification","Culture","Dimensions","Test URL 5","Harvard")
         );
     }
 
     public static List<CLArtwork> getMockMappedChicagoArt() {
         return List.of(
-                new CLArtwork("AIC-1","Test Title 1","Test Artist 1", "1800", "1800", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 1", "Art Institute of Chicago"),
-                new CLArtwork("AIC-2","Test Title 2","Test Artist 2", "1850", "1850", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 2", "Art Institute of Chicago"),
-                new CLArtwork("AIC-3","Test Title 3","Test Artist 3", "1900", "1900", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 3", "Art Institute of Chicago"),
-                new CLArtwork("AIC-4","Test Title 4","Test Artist 4", "1950", "1950", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 4", "Art Institute of Chicago"),
-                new CLArtwork("AIC-5","Test Title 5","Test Artist 5", "2000", "2000", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 5", "Art Institute of Chicago")
+                new CLArtwork("1_AIC","Test Title 1","Test Artist 1", "1800", "1800", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 1", "Art Institute of Chicago"),
+                new CLArtwork("2_AIC","Test Title 2","Test Artist 2", "1850", "1850", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 2", "Art Institute of Chicago"),
+                new CLArtwork("3_AIC","Test Title 3","Test Artist 3", "1900", "1900", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 3", "Art Institute of Chicago"),
+                new CLArtwork("4_AIC","Test Title 4","Test Artist 4", "1950", "1950", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 4", "Art Institute of Chicago"),
+                new CLArtwork("5_AIC","Test Title 5","Test Artist 5", "2000", "2000", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 5", "Art Institute of Chicago")
         );
     }
 

@@ -17,7 +17,7 @@ public class HarvardMapper {
         }
         return page.records().stream()
                 .map(art -> new CLArtwork(
-                        "HVD-"+art.id(),
+                        art.id()+"_HVD",
                         art.title() == null ? "Unknown" : art.title(),
                         extractArtist(art.people()),
                         art.dated() == null ? "Unknown" : art.dated(),
