@@ -25,9 +25,7 @@ public class HarvardClient {
 
     public Mono<HarvardPage> getHarvardArtwork(String uri) {
 
-        return webClient.get().uri(uriBuilder -> uriBuilder
-                        .path(uri)
-                        .build())
+        return webClient.get().uri(uri)
                 .retrieve().bodyToMono(HarvardPage.class)
                 .onErrorResume(WebClientResponseException.class, ex -> {
                     if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {

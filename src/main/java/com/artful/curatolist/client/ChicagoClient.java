@@ -22,9 +22,7 @@ public class ChicagoClient {
 
     public Mono<ChicagoPage> getChicagoArtwork(String uri) {
 
-        return webClient.get().uri(uriBuilder -> uriBuilder
-                        .path(uri)
-                .build())
+        return webClient.get().uri(uri)
                 .retrieve().bodyToMono(ChicagoPage.class).onErrorResume(WebClientResponseException.class, ex -> {
                     if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
                         return Mono.error(new ResourcesNotFoundException("Unable to find results from Chicago"));
