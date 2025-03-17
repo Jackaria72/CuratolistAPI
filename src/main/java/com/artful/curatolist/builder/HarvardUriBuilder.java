@@ -14,7 +14,7 @@ public class HarvardUriBuilder {
         this.API_KEY = apiKey;
     }
 
-    public String buildHarvardUri(int page, String searchQuery) {
+    public String buildHarvardUri(int page, String searchQuery, String sortTerm) {
         UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/object")
                 .queryParam("apikey", API_KEY)
                 .queryParam("q", "imagepermissionlevel:0")
@@ -23,6 +23,15 @@ public class HarvardUriBuilder {
                 .queryParam("size", 100);
         if (searchQuery != null) {
             uri.queryParam("keyword", searchQuery);
+        }
+        if (sortTerm == null || sortTerm.isBlank()) {
+            uri.queryParam("sort", "id");
+        } else {
+            switch (sortTerm.toLowerCase()) {
+                default ->  uri.queryParam("sort", "id");
+                case "title" -> uri.queryParam("sort", "title.exact");
+                case "classification" -> uri.queryParam("sort", "classification.exact");
+            }
         }
         return uri.toUriString();
     }

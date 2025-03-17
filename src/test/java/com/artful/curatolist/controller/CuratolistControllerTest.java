@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -29,7 +30,7 @@ class CuratolistControllerTest {
 
     @Test
     void testGetArtwork() throws Exception {
-        when(curatolistService.getArt(1, "both", null)).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
+        when(curatolistService.getArt(anyInt(), anyString(), any(), any())).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
 
         webTestClient.get().uri(uriBuilder ->
                         uriBuilder.path("/curatolist/api/v1")

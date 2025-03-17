@@ -39,11 +39,11 @@ class HarvardServiceTest {
         HarvardPage mockHarvardPage = TestUtilityMethods.getMockHarvardPage();
         List<CLArtwork> harvardMapped = TestUtilityMethods.getMockMappedHarvardArt();
 
-        when(harvardUriBuilder.buildHarvardUri(anyInt(), any())).thenReturn("test-uri");
+        when(harvardUriBuilder.buildHarvardUri(anyInt(), any(), any())).thenReturn("test-uri");
         when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.just(mockHarvardPage));
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
-        Mono<CLPage> results = harvardService.getArt(1, null);
+        Mono<CLPage> results = harvardService.getArt(1, null, null);
 
 
 
@@ -58,10 +58,10 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsExternalApiExceptionWhenApiFails() {
-        when(harvardUriBuilder.buildHarvardUri(anyInt(), any())).thenReturn("test-uri");
+        when(harvardUriBuilder.buildHarvardUri(anyInt(), any(), any())).thenReturn("test-uri");
         when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
 
-        Mono<CLPage> result = harvardService.getArt(1, null);
+        Mono<CLPage> result = harvardService.getArt(1, null, null);
 
         StepVerifier.create(result)
                 .expectError(ExternalApiException.class)
@@ -69,10 +69,10 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsResourcesNotFoundExceptionWhenApiFailsWhenResourcesNotFound() {
-        when(harvardUriBuilder.buildHarvardUri(anyInt(), any())).thenReturn("test-uri");
+        when(harvardUriBuilder.buildHarvardUri(anyInt(), any(), any())).thenReturn("test-uri");
         when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.error(new ResourcesNotFoundException("Harvard Error")));
 
-        Mono<CLPage> result = harvardService.getArt(1, null);
+        Mono<CLPage> result = harvardService.getArt(1, null, null);
 
         StepVerifier.create(result)
                 .expectError(ResourcesNotFoundException.class)

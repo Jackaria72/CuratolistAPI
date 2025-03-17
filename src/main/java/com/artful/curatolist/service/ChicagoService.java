@@ -25,8 +25,8 @@ public class ChicagoService implements ApiService {
     }
 
     @Override
-    public Mono<CLPage> getArt(int page, String searchQuery) {
-        String uri = chicagoUriBuilder.buildChicagoUri(page, searchQuery);
+    public Mono<CLPage> getArt(int page, String searchQuery, String sortTerm) {
+        String uri = chicagoUriBuilder.buildChicagoUri(page, searchQuery, sortTerm);
         Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(uri);
 
         return chicagoMono.map(
