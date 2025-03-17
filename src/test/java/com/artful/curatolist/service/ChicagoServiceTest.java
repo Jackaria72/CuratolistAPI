@@ -1,6 +1,7 @@
 package com.artful.curatolist.service;
 
 import com.artful.curatolist.TestUtilityMethods;
+import com.artful.curatolist.builder.ChicagoUriBuilder;
 import com.artful.curatolist.client.ChicagoClient;
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
@@ -27,6 +28,8 @@ class ChicagoServiceTest {
     private ChicagoClient chicagoClient;
     @Mock
     private ChicagoMapper chicagoMapper;
+    @Mock
+    private ChicagoUriBuilder chicagoUriBuilder;
     @InjectMocks
     private ChicagoService chicagoService;
 
@@ -35,7 +38,8 @@ class ChicagoServiceTest {
         ChicagoPage mockChicagoPage = TestUtilityMethods.getMockChicagoPage();
         List<CLArtwork> chicagoMapped = TestUtilityMethods.getMockMappedChicagoArt();
 
-        when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.just(mockChicagoPage));
+        when(chicagoUriBuilder.buildChicagoUri(anyInt())).thenReturn(anyString());
+        when(chicagoClient.getChicagoArtwork("test-uri")).thenReturn(Mono.just(mockChicagoPage));
         when(chicagoMapper.mapChicagoArt(mockChicagoPage)).thenReturn(chicagoMapped);
 
         Mono<CLPage> results = chicagoService.getArt(1);
@@ -53,7 +57,8 @@ class ChicagoServiceTest {
     }
     @Test
     void testGetArtThrowsExternalApiExceptionWhenApiFails() {
-                when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
+        when(chicagoUriBuilder.buildChicagoUri(anyInt())).thenReturn(anyString());
+        when(chicagoClient.getChicagoArtwork("test-uri")).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
 
         Mono<CLPage> result = chicagoService.getArt(1);
 
@@ -63,7 +68,8 @@ class ChicagoServiceTest {
     }
     @Test
     void testGetArtThrowsResourcesNotFoundExceptionWhenApiFailsWhenResourcesNotFound() {
-        when(chicagoClient.getChicagoArtwork(anyString())).thenReturn(Mono.error(new ResourcesNotFoundException("Chicago Error")));
+        when(chicagoUriBuilder.buildChicagoUri(anyInt())).thenReturn(anyString());
+        when(chicagoClient.getChicagoArtwork("test-uri")).thenReturn(Mono.error(new ResourcesNotFoundException("Chicago Error")));
 
         Mono<CLPage> result = chicagoService.getArt(1);
 

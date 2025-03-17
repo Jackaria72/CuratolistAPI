@@ -1,6 +1,7 @@
 package com.artful.curatolist.service;
 
 import com.artful.curatolist.TestUtilityMethods;
+import com.artful.curatolist.builder.HarvardUriBuilder;
 import com.artful.curatolist.client.HarvardClient;
 import com.artful.curatolist.controller.exception.ExternalApiException;
 import com.artful.curatolist.controller.exception.ResourcesNotFoundException;
@@ -28,6 +29,8 @@ class HarvardServiceTest {
     private HarvardClient harvardClient;
     @Mock
     private HarvardMapper harvardMapper;
+    @Mock
+    private HarvardUriBuilder harvardUriBuilder;
     @InjectMocks
     private HarvardService harvardService;
 
@@ -36,7 +39,8 @@ class HarvardServiceTest {
         HarvardPage mockHarvardPage = TestUtilityMethods.getMockHarvardPage();
         List<CLArtwork> harvardMapped = TestUtilityMethods.getMockMappedHarvardArt();
 
-        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.just(mockHarvardPage));
+        when(harvardUriBuilder.buildHarvardUri(anyInt())).thenReturn(anyString());
+        when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.just(mockHarvardPage));
         when(harvardMapper.mapHarvardArt(mockHarvardPage)).thenReturn(harvardMapped);
 
         Mono<CLPage> results = harvardService.getArt(1);
@@ -54,7 +58,8 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsExternalApiExceptionWhenApiFails() {
-        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
+        when(harvardUriBuilder.buildHarvardUri(anyInt())).thenReturn(anyString());
+        when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
 
         Mono<CLPage> result = harvardService.getArt(1);
 
@@ -64,7 +69,8 @@ class HarvardServiceTest {
     }
     @Test
     void testGetArtThrowsResourcesNotFoundExceptionWhenApiFailsWhenResourcesNotFound() {
-        when(harvardClient.getHarvardArtwork(anyString())).thenReturn(Mono.error(new ResourcesNotFoundException("Harvard Error")));
+        when(harvardUriBuilder.buildHarvardUri(anyInt())).thenReturn(anyString());
+        when(harvardClient.getHarvardArtwork("test-uri")).thenReturn(Mono.error(new ResourcesNotFoundException("Harvard Error")));
 
         Mono<CLPage> result = harvardService.getArt(1);
 
