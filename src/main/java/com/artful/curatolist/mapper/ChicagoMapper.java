@@ -17,7 +17,7 @@ public class ChicagoMapper {
         }
         return page.data().stream()
                 .map(art -> new CLArtwork(
-                        "AIC-"+art.id(),
+                        art.id()+"_AIC",
                         art.title() == null ? "Unknown" : art.title(),
                         art.artist_title() == null ? "Unknown" : art.artist_title(),
                         String.valueOf(art.date_end()),
