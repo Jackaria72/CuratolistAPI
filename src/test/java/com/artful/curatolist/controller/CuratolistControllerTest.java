@@ -33,9 +33,8 @@ class CuratolistControllerTest {
         when(curatolistService.getArt(anyInt(), anyString(), any(), any(), any())).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
 
         webTestClient.get().uri(uriBuilder ->
-                        uriBuilder.path("/curatolist/api/v1")
+                        uriBuilder.path("/curatolist/api/v1/art")
                                 .queryParam("page", "1")
-                                .queryParam("limit", "10")
                                 .build())
                 .exchange()
                 .expectStatus().isOk()
@@ -46,9 +45,8 @@ class CuratolistControllerTest {
         for (int i = 0; i < TestUtilityMethods.getMockCLPage().artwork().size(); i++) {
             webTestClient.get()
                     .uri(uriBuilder ->
-                            uriBuilder.path("/curatolist/api/v1")
+                            uriBuilder.path("/curatolist/api/v1/art")
                                     .queryParam("page", "1")
-                                    .queryParam("limit", "10")
                                     .build())
                     .exchange()
                     .expectStatus().isOk()
