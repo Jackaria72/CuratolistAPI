@@ -9,6 +9,7 @@ import com.artful.curatolist.model.HarvardPage;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.List;
 
 @Service
@@ -25,8 +26,8 @@ public class HarvardService implements ApiService {
     }
 
     @Override
-    public Mono<CLPage> getArt(int page, String searchQuery, String sortTerm) {
-        String uri = harvardUriBuilder.buildHarvardUri(page, searchQuery, sortTerm);
+    public Mono<CLPage> getArt(int page, String searchQuery, String sortTerm, String filters) {
+        String uri = harvardUriBuilder.buildHarvardUri(page, searchQuery, sortTerm, filters);
         Mono<HarvardPage> harvardPageMono = harvardClient.getHarvardArtwork(uri);
 
         return harvardPageMono.map(

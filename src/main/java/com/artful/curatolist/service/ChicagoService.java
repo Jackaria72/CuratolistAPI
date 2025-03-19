@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ChicagoService implements ApiService {
@@ -25,8 +26,8 @@ public class ChicagoService implements ApiService {
     }
 
     @Override
-    public Mono<CLPage> getArt(int page, String searchQuery, String sortTerm) {
-        String uri = chicagoUriBuilder.buildChicagoUri(page, searchQuery, sortTerm);
+    public Mono<CLPage> getArt(int page, String searchQuery, String sortTerm, String filters) {
+        String uri = chicagoUriBuilder.buildChicagoUri(page, searchQuery, sortTerm, filters);
         Mono<ChicagoPage> chicagoMono = chicagoClient.getChicagoArtwork(uri);
 
         return chicagoMono.map(

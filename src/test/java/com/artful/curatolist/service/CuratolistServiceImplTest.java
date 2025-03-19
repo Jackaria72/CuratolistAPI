@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Comparator;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,16 +36,16 @@ class CuratolistServiceImplTest {
         CLPage chicagoExpected = TestUtilityMethods.getMockCLPageChicagoOnly();
         CLPage harvardExpected = TestUtilityMethods.getMockCLPageHarvardOnly();
 
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(chicagoExpected));
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(harvardExpected));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(chicagoExpected));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(harvardExpected));
         when(sortComparator.getComparator(anyString())).thenReturn(Comparator.comparing(CLArtwork::id));
 
-        Mono<CLPage> results = curatolistService.getArt(1, "both", null, "id");
+        Mono<CLPage> results = curatolistService.getArt(1, "both", null, "id", null);
 
         StepVerifier.create(results)
                 .assertNext(clPage -> {
-                    verify(harvardService, times(1)).getArt(anyInt(), any(), any());
-                    verify(chicagoService, times(1)).getArt(anyInt(), any(), any());
+                    verify(harvardService, times(1)).getArt(anyInt(), any(), any(), any());
+                    verify(chicagoService, times(1)).getArt(anyInt(), any(), any(), any());
                     assertNotNull(clPage);
                     assertEquals(harvardExpected.artwork().size() + chicagoExpected.artwork().size(), clPage.artwork().size());
                     assertTrue(clPage.artwork().containsAll(chicagoExpected.artwork()));
@@ -56,15 +57,15 @@ class CuratolistServiceImplTest {
     void testGetArtGetsOnlyHarvardArtWithHarvardParam() {
         CLPage harvardExpected = TestUtilityMethods.getMockCLPageHarvardOnly();
 
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(harvardExpected));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(harvardExpected));
         when(sortComparator.getComparator(anyString())).thenReturn(Comparator.comparing(CLArtwork::id));
 
-        Mono<CLPage> results = curatolistService.getArt(1, "harvard", null, "id");
+        Mono<CLPage> results = curatolistService.getArt(1, "harvard", null, "id", null);
 
         StepVerifier.create(results)
                 .assertNext(clPage -> {
-                    verify(harvardService, times(1)).getArt(anyInt(), any(), any());
-                    verify(chicagoService, times(0)).getArt(anyInt(), any(), any());
+                    verify(harvardService, times(1)).getArt(anyInt(), any(), any(), any());
+                    verify(chicagoService, times(0)).getArt(anyInt(), any(), any(), any());
                     assertNotNull(clPage);
                     assertEquals(harvardExpected.artwork().size(), clPage.artwork().size());
                     assertTrue(clPage.artwork().containsAll(harvardExpected.artwork()));
@@ -75,15 +76,15 @@ class CuratolistServiceImplTest {
     void testGetArtGetsOnlyChicagoArtWithChicagoParam() {
         CLPage chicagoExpected = TestUtilityMethods.getMockCLPageChicagoOnly();
 
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(chicagoExpected));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(chicagoExpected));
         when(sortComparator.getComparator(anyString())).thenReturn(Comparator.comparing(CLArtwork::id));
 
-        Mono<CLPage> results = curatolistService.getArt(1, "chicago", null, "id");
+        Mono<CLPage> results = curatolistService.getArt(1, "chicago", null, "id", null);
 
         StepVerifier.create(results)
                 .assertNext(clPage -> {
-                    verify(chicagoService, times(1)).getArt(anyInt(), any(), any());
-                    verify(harvardService, times(0)).getArt(anyInt(), any(), any());
+                    verify(chicagoService, times(1)).getArt(anyInt(), any(), any(), any());
+                    verify(harvardService, times(0)).getArt(anyInt(), any(), any(), any());
                     assertNotNull(clPage);
                     assertEquals(chicagoExpected.artwork().size(), clPage.artwork().size());
                     assertTrue(clPage.artwork().containsAll(chicagoExpected.artwork()));
@@ -94,11 +95,11 @@ class CuratolistServiceImplTest {
     void testGetArtReturnsPartialResultsWhenHarvardFails() {
         CLPage expected = TestUtilityMethods.getMockCLPageChicagoOnly();
 
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard API Error")));
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(expected));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard API Error")));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(expected));
         when(sortComparator.getComparator(anyString())).thenReturn(Comparator.comparing(CLArtwork::id));
 
-        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id");
+        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id", null);
 
         StepVerifier.create(result)
                 .assertNext(clPage -> {
@@ -112,11 +113,11 @@ class CuratolistServiceImplTest {
     void testGetArtReturnsPartialResultsWhenChicagoFails() {
         CLPage expected = TestUtilityMethods.getMockCLPageHarvardOnly();
 
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago API Error")));
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.just(expected));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago API Error")));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.just(expected));
         when(sortComparator.getComparator(anyString())).thenReturn(Comparator.comparing(CLArtwork::id));
 
-        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id");
+        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id", null);
 
         StepVerifier.create(result)
                 .assertNext(clPage -> {
@@ -128,10 +129,10 @@ class CuratolistServiceImplTest {
 
     @Test
     void testGetArtThrowsExceptionWhenBothApisFail() {
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
 
-        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id");
+        Mono<CLPage> result = curatolistService.getArt(1, "both", null, "id", null);
 
         StepVerifier.create(result)
                 .expectError(ResourcesNotFoundException.class)
@@ -140,9 +141,9 @@ class CuratolistServiceImplTest {
 
     @Test
     void testGetArtThrowsExceptionWhenHarvardFailsWithSingleSourceParam() {
-        when(harvardService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
+        when(harvardService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Harvard Error")));
 
-        Mono<CLPage> result = curatolistService.getArt(1, "harvard", null, "id");
+        Mono<CLPage> result = curatolistService.getArt(1, "harvard", null, "id", null);
 
         StepVerifier.create(result)
                 .expectError(ExternalApiException.class)
@@ -151,9 +152,9 @@ class CuratolistServiceImplTest {
 
     @Test
     void testGetArtThrowsExceptionWhenChicagoFailsWithSingleSourceParam() {
-        when(chicagoService.getArt(anyInt(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
+        when(chicagoService.getArt(anyInt(), any(), any(), any())).thenReturn(Mono.error(new ExternalApiException("Chicago Error")));
 
-        Mono<CLPage> result = curatolistService.getArt(1, "chicago", null, "id");
+        Mono<CLPage> result = curatolistService.getArt(1, "chicago", null, "id", null);
 
         StepVerifier.create(result)
                 .expectError(ExternalApiException.class)

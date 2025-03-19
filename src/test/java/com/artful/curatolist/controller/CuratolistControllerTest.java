@@ -30,7 +30,7 @@ class CuratolistControllerTest {
 
     @Test
     void testGetArtwork() throws Exception {
-        when(curatolistService.getArt(anyInt(), anyString(), any(), any())).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
+        when(curatolistService.getArt(anyInt(), anyString(), any(), any(), any())).thenReturn(Mono.just(TestUtilityMethods.getMockCLPage()));
 
         webTestClient.get().uri(uriBuilder ->
                         uriBuilder.path("/curatolist/api/v1")
