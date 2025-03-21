@@ -36,7 +36,8 @@ public class HarvardService implements ApiService {
                     CLPage.PageInfo pageInfo = new CLPage.PageInfo(
                             0,0,
                             harvardPage.info().totalrecords(),
-                            harvardPage.info().pages());
+                            harvardPage.info().pages(),
+                            0,0);
                     return new CLPage(pageInfo, artworks);
                 });
     }
