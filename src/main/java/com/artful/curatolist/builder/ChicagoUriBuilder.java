@@ -14,11 +14,12 @@ public class ChicagoUriBuilder {
         UriComponentsBuilder uri = UriComponentsBuilder.fromPath("/artworks/search")
                 .queryParam("fields", "id,title,artist_title,date_start,date_end,date_display,image_id,is_public_domain,medium_display,dimensions,classification_title,place_of_origin,technique_titles")
                 .queryParam("page", page)
-                .queryParam("limit", 100)
-                .queryParam("query[bool][must][term][is_public_domain]","true");
+                .queryParam("limit", 100);
         if (filters != null) {
             String[] splitFilter = filters.split(":",2);
             uri.queryParam("query[bool][filter][match_phrase]["+splitFilter[0]+"]", splitFilter[1]);
+        } else {
+            uri.queryParam("query[bool][must][term][is_public_domain]","true");
         }
         if (searchQuery != null) {
             uri.queryParam("q",searchQuery);
