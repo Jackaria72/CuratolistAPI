@@ -27,7 +27,7 @@ public class ChicagoMapper {
                         art.classification_title() == null ? "Unknown" : art.classification_title(),
                         art.place_of_origin() == null ? "Unknown" : art.place_of_origin(),
                         art.dimensions() == null ? "Unknown" : art.dimensions(),
-                        art.image_id(),
+                        art.image_id() == null ? "No URL available" : "https://www.artic.edu/iiif/2/".concat(art.image_id()).concat("/full/843,/0/default.jpg"),
                         "Art Institute of Chicago"
                 )).collect(Collectors.toList());
     }
