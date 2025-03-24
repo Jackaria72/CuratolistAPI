@@ -44,16 +44,16 @@ public class TestUtilityMethods {
 
     public static List<CLArtwork> getMockMappedChicagoArt() {
         return List.of(
-                new CLArtwork("1_AIC","Test Title 1","Test Artist 1", "1800", "1800", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 1", "Art Institute of Chicago"),
-                new CLArtwork("2_AIC","Test Title 2","Test Artist 2", "1850", "1850", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 2", "Art Institute of Chicago"),
-                new CLArtwork("3_AIC","Test Title 3","Test Artist 3", "1900", "1900", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 3", "Art Institute of Chicago"),
-                new CLArtwork("4_AIC","Test Title 4","Test Artist 4", "1950", "1950", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 4", "Art Institute of Chicago"),
-                new CLArtwork("5_AIC","Test Title 5","Test Artist 5", "2000", "2000", "Medium", "Technique", "Classification","Origin","Dimensions", "Test ID 5", "Art Institute of Chicago")
+                new CLArtwork("1_AIC","Test Title 1","Test Artist 1", "1800", "1800", "Medium", "Technique", "Classification","Origin","Dimensions", "https://www.artic.edu/iiif/2/Test ID 1/full/843,/0/default.jpg", "Art Institute of Chicago"),
+                new CLArtwork("2_AIC","Test Title 2","Test Artist 2", "1850", "1850", "Medium", "Technique", "Classification","Origin","Dimensions", "https://www.artic.edu/iiif/2/Test ID 2/full/843,/0/default.jpg", "Art Institute of Chicago"),
+                new CLArtwork("3_AIC","Test Title 3","Test Artist 3", "1900", "1900", "Medium", "Technique", "Classification","Origin","Dimensions", "https://www.artic.edu/iiif/2/Test ID 3/full/843,/0/default.jpg", "Art Institute of Chicago"),
+                new CLArtwork("4_AIC","Test Title 4","Test Artist 4", "1950", "1950", "Medium", "Technique", "Classification","Origin","Dimensions", "https://www.artic.edu/iiif/2/Test ID 4/full/843,/0/default.jpg", "Art Institute of Chicago"),
+                new CLArtwork("5_AIC","Test Title 5","Test Artist 5", "2000", "2000", "Medium", "Technique", "Classification","Origin","Dimensions", "https://www.artic.edu/iiif/2/Test ID 5/full/843,/0/default.jpg", "Art Institute of Chicago")
         );
     }
 
     public static CLPage getMockCLPage() {
-        CLPage.PageInfo pageInfo = new CLPage.PageInfo(5,1,5,1);
+        CLPage.PageInfo pageInfo = new CLPage.PageInfo(5,1,5,1, 10,2);
         List<CLArtwork> artworks = Stream.concat(
                 getMockMappedChicagoArt().stream(),
                 getMockMappedHarvardArt().stream()
@@ -63,14 +63,14 @@ public class TestUtilityMethods {
 
     public static CLPage getMockCLPageChicagoOnly() {
         return new CLPage(
-                new CLPage.PageInfo(5,1,0,0),
+                new CLPage.PageInfo(5,1,0,0, 5, 1),
                 getMockMappedChicagoArt()
         );
     }
 
     public static CLPage getMockCLPageHarvardOnly() {
         return new CLPage(
-                new CLPage.PageInfo(0,0,5,1),
+                new CLPage.PageInfo(0,0,5,1, 5,1),
                 getMockMappedHarvardArt()
         );
     }
