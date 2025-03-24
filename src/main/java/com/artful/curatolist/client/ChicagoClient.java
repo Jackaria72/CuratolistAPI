@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -19,9 +20,13 @@ public class ChicagoClient {
         this.webClient = webclientBuilder.build();
     }
 
-    public Mono<ChicagoPage> getChicagoArtwork(String uri) {
+    public Mono<ChicagoPage> getChicagoArtwork(String uriExt) {
+        String uri = UriComponentsBuilder.fromPath("/artworks/search")
+                .queryParam("fields", "id,title,artist_title,date_start,date_end,description,image_id,is_public_domain,medium_display,dimensions,classification_title,place_of_origin,technique_titles")
+                .queryParam("limit", 100)
+                .toUriString();
 
-        return webClient.get().uri(uri)
+        return webClient.get().uri(uri+uriExt)
                 .retrieve().bodyToMono(ChicagoPage.class).onErrorResume(WebClientResponseException.class, ex -> {
                     if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
                         return Mono.error(new ResourcesNotFoundException("Unable to find results from Chicago"));
