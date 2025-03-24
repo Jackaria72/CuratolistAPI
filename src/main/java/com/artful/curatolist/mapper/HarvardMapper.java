@@ -21,7 +21,7 @@ public class HarvardMapper {
                         art.title() == null ? "Unknown" : art.title(),
                         extractArtist(art.people()),
                         art.dated() == null ? "Unknown" : art.dated(),
-                        art.period() == null ? "Unknown" : art.period(),
+                        art.description() == null ? "Unknown" : art.description(),
                         art.medium() == null ? "Unknown" : art.medium(),
                         art.technique() == null ? "unknown" : art.technique(),
                         art.classification() == null ? "Unknown" : art.classification(),

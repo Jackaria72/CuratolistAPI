@@ -36,6 +36,7 @@ public class ChicagoService implements ApiService {
                     CLPage.PageInfo pageInfo = new CLPage.PageInfo(
                             chicagoPage.pagination().total(),
                             chicagoPage.pagination().total_pages(),
+                            0,0,
                             0,0);
                     return new CLPage(pageInfo, artworks);
                 });

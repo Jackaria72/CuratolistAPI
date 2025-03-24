@@ -21,13 +21,13 @@ public class ChicagoMapper {
                         art.title() == null ? "Unknown" : art.title(),
                         art.artist_title() == null ? "Unknown" : art.artist_title(),
                         String.valueOf(art.date_end()),
-                        art.date_display() == null ? "Unknown" : art.date_display(),
+                        art.description() == null ? "Unknown" : art.description(),
                         art.medium_display() == null ? "Unknown" : art.medium_display(),
                         art.technique_titles() != null && !art.technique_titles().isEmpty()? art.technique_titles().getFirst() : "Unknown",
                         art.classification_title() == null ? "Unknown" : art.classification_title(),
                         art.place_of_origin() == null ? "Unknown" : art.place_of_origin(),
                         art.dimensions() == null ? "Unknown" : art.dimensions(),
-                        art.image_id(),
+                        art.image_id() == null ? "No URL available" : "https://www.artic.edu/iiif/2/".concat(art.image_id()).concat("/full/843,/0/default.jpg"),
                         "Art Institute of Chicago"
                 )).collect(Collectors.toList());
     }

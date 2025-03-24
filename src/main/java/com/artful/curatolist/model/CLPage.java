@@ -7,6 +7,8 @@ public record CLPage(PageInfo pageInfo, List<CLArtwork> artwork) {
             int chicagoTotal,
             int chicagoPageTotal,
             int harvardTotal,
-            int HarvardPageTotal
+            int HarvardPageTotal,
+            int combinedTotal,
+            int combinedPageTotal
     ){}
 }

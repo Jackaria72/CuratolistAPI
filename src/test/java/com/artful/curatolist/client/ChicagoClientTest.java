@@ -37,7 +37,7 @@ class ChicagoClientTest {
                 "{" +
                 "\"id\": 1," +
                 "\"title\": \"Test Title\"," +
-                "\"date_display\": \"1800\"," +
+                "\"description\": \"1800\"," +
                 "\"artist_display\": \"Test Artist\"," +
                 "\"is_public_domain\": true," +
                 "\"image_id\": \"Test-image-id\"" +

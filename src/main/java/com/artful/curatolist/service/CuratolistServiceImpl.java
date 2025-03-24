@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,17 +30,17 @@ public class CuratolistServiceImpl implements CuratolistService{
     @Override
     public Mono<CLPage> getArt(int page, String source, String searchQuery, String sortTerm, String filters) {
 
-        Mono<CLPage> harvardMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList()));
-        Mono<CLPage> chicagoMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList()));
+        Mono<CLPage> harvardMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0,0,0),Collections.emptyList()));
+        Mono<CLPage> chicagoMono = Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0,0,0),Collections.emptyList()));
 
         switch (source.toLowerCase()) {
             case "chicago" -> chicagoMono = chicagoService.getArt(page, searchQuery, sortTerm, filters);
             case "harvard" -> harvardMono = harvardService.getArt(page, searchQuery, sortTerm, filters);
             case "both" -> {
                 harvardMono = harvardService.getArt(page, searchQuery, sortTerm, filters)
-                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0,0,0),Collections.emptyList())));
                 chicagoMono = chicagoService.getArt(page, searchQuery, sortTerm, filters)
-                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0),Collections.emptyList())));
+                        .onErrorResume(ex -> Mono.just(new CLPage(new CLPage.PageInfo(0,0,0,0,0,0),Collections.emptyList())));
             }
         }
 
@@ -65,7 +64,10 @@ public class CuratolistServiceImpl implements CuratolistService{
                             chicago.pageInfo().chicagoTotal(),
                             chicago.pageInfo().chicagoPageTotal(),
                             harvard.pageInfo().harvardTotal(),
-                            harvard.pageInfo().HarvardPageTotal());
+                            harvard.pageInfo().HarvardPageTotal(),
+                            (harvard.pageInfo().harvardTotal() + chicago.pageInfo().chicagoTotal()),
+                            ((harvard.pageInfo().HarvardPageTotal() + chicago.pageInfo().chicagoPageTotal()))
+                    );
 
                     return new CLPage(pageInfo, combined);
                 });

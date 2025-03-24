@@ -12,7 +12,7 @@ public record HarvardPage(HarvardPageInfo info, List<HarvardArt> records) {
             String title,
             List<Person> people,
             String dated,
-            String period,
+            String description,
             String medium,
             String technique,
             String classification,

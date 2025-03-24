@@ -8,8 +8,6 @@ import com.artful.curatolist.model.CLPage;
 import com.artful.curatolist.model.HarvardPage;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 import java.util.List;
 
 @Service
@@ -36,7 +34,8 @@ public class HarvardService implements ApiService {
                     CLPage.PageInfo pageInfo = new CLPage.PageInfo(
                             0,0,
                             harvardPage.info().totalrecords(),
-                            harvardPage.info().pages());
+                            harvardPage.info().pages(),
+                            0,0);
                     return new CLPage(pageInfo, artworks);
                 });
     }

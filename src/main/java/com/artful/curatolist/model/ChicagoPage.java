@@ -13,7 +13,7 @@ public record ChicagoPage(ChicagoPageInfo pagination, List<ChicagoArt> data) {
             String artist_title,
             int date_start,
             int date_end,
-            String date_display,
+            String description,
             String medium_display,
             List<String> technique_titles,
             String classification_title,

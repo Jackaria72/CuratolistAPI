@@ -5,7 +5,7 @@ public record CLArtwork(
    String title,
    String artist,
    String date,
-   String period,
+   String description,
    String medium,
    String technique,
    String classification,

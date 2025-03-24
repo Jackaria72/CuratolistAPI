@@ -27,7 +27,7 @@ class HarvardClientTest {
         mockWebServer = new MockWebServer();
         WebClient.Builder mockWebClient = WebClient.builder()
                 .baseUrl(mockWebServer.url("/").toString());
-        testHarvardClient = new HarvardClient(mockWebClient);
+        testHarvardClient = new HarvardClient(mockWebClient, "testApiKey");
         mockResponse = "{" +
                 "\"info\" : {" +
                 "\"totalrecords\": 183815," +
@@ -42,7 +42,7 @@ class HarvardClientTest {
                 "\"name\": \"Test Artist\"" +
                 "}]," +
                 "\"dated\": \"1858 - 1859\"," +
-                "\"period\": \"19th century\"" +
+                "\"description\": \"19th century\"" +
                 "}]" +
                 "}";
     }
