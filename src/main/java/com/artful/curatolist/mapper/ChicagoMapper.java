@@ -21,7 +21,7 @@ public class ChicagoMapper {
                         art.title() == null ? "Unknown" : art.title(),
                         art.artist_title() == null ? "Unknown" : art.artist_title(),
                         String.valueOf(art.date_end()),
-                        art.date_display() == null ? "Unknown" : art.date_display(),
+                        art.description() == null ? "Unknown" : art.description(),
                         art.medium_display() == null ? "Unknown" : art.medium_display(),
                         art.technique_titles() != null && !art.technique_titles().isEmpty()? art.technique_titles().getFirst() : "Unknown",
                         art.classification_title() == null ? "Unknown" : art.classification_title(),
