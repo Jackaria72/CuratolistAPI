@@ -8,8 +8,6 @@ import com.artful.curatolist.model.CLPage;
 import com.artful.curatolist.model.HarvardPage;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 import java.util.List;
 
 @Service

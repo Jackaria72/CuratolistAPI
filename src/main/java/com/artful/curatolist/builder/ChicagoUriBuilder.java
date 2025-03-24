@@ -1,11 +1,7 @@
 package com.artful.curatolist.builder;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class ChicagoUriBuilder {
