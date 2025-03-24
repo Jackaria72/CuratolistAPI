@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.0.0</version> <!-- Ensure the version matches your Spring Boot version -->
+			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -130,7 +130,7 @@
 										<limit>
 											<counter>INSTRUCTION</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.60</minimum>
+											<minimum>0.80</minimum>
 										</limit>
 									</limits>
 								</rule>
